@@ -14,17 +14,17 @@ public class FacilityService implements IFacilityService {
 
     @Override
     public boolean CreateFacility(Facility facility) {
-        return false;
+        return facilityRepository.CreateFacility(facility);
     }
 
     @Override
     public boolean editFacility(Facility facility, int id) {
-        return false;
+        return facilityRepository.editFacility(facility, id);
     }
 
     @Override
     public boolean deleteFacility(int id) {
-        return false;
+        return facilityRepository.deleteFacility(id);
     }
 
     @Override
@@ -34,21 +34,21 @@ public class FacilityService implements IFacilityService {
 
     @Override
     public List<Facility> findByName() {
-        return null;
+        return facilityRepository.findByName();
     }
 
     @Override
     public Facility findById(int id_search) {
-        return null;
+        return facilityRepository.findById(id_search);
     }
 
     @Override
     public List<ServiceType> getServiceTypeList() {
-        return null;
+        return facilityRepository.getServiceTypeList();
     }
 
     @Override
     public List<RentType> getRentalTypeList() {
-        return null;
+        return facilityRepository.getRentalTypeList();
     }
 }

@@ -14,19 +14,106 @@ import java.util.List;
 
 public class FacilityRepository implements IFacilityRepository {
     private final String FIND_FACILITY = "CALL find_all_service();";
+    private final String CREATE_FACILITY = "CALL create_new_facility(?,?,?,?,?,?,?,?,?,?,?,?);";
+    private final String EDIT_FACILITY = "CALL edit_facility(?,?,?,?,?,?,?,?,?,?,?,?);";
+    private final String DELETE_FACILITY = "CALL delete_facility(?);";
 
     @Override
     public boolean CreateFacility(Facility facility) {
+        int check;
+        Connection connection = DatabaseConnect.getConnectDB();
+        String standardRoom = facility.getStandardRoom();
+        String description = facility.getDescription();
+        double poolArea = facility.getPoolArea();
+        int numberFloor = facility.getNumberFloor();
+        String facilityFree = facility.getFacilityFree();
+        if (facility.getFacilityType() == 1){
+            facilityFree = null;
+        }else if (facility.getFacilityType() == 2){
+            facilityFree = null;
+            poolArea = 0;
+        }else {
+            standardRoom = null;
+            description = null;
+            poolArea = 0;
+            numberFloor = 0;
+        }
+        try {
+            CallableStatement callableStatement = connection.prepareCall(CREATE_FACILITY);
+            callableStatement.setInt(1, facility.getId());
+            callableStatement.setString(2, facility.getName());
+            callableStatement.setInt(3, facility.getArea());
+            callableStatement.setDouble(4, facility.getDeposit());
+            callableStatement.setInt(5, facility.getMaxPeople());
+            callableStatement.setInt(6, facility.getRentTypeId());
+            callableStatement.setInt(7, facility.getFacilityType());
+            callableStatement.setString(8, standardRoom);
+            callableStatement.setString(9, description);
+            callableStatement.setDouble(10, poolArea);
+            callableStatement.setInt(11, numberFloor);
+            callableStatement.setString(12, facilityFree);
+            check = callableStatement.executeUpdate();
+            return check > 0? true: false;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return false;
     }
 
     @Override
     public boolean editFacility(Facility facility, int id) {
+        int check;
+        Connection connection = DatabaseConnect.getConnectDB();
+        String standardRoom = facility.getStandardRoom();
+        String description = facility.getDescription();
+        double poolArea = facility.getPoolArea();
+        int numberFloor = facility.getNumberFloor();
+        String facilityFree = facility.getFacilityFree();
+        if (facility.getFacilityType() == 1){
+            facilityFree = null;
+        }else if (facility.getFacilityType() == 2){
+            facilityFree = null;
+            poolArea = 0;
+        }else {
+            standardRoom = null;
+            description = null;
+            poolArea = 0;
+            numberFloor = 0;
+        }
+        try {
+            CallableStatement callableStatement = connection.prepareCall(EDIT_FACILITY);
+            callableStatement.setInt(1, facility.getId());
+            callableStatement.setString(2, facility.getName());
+            callableStatement.setInt(3, facility.getArea());
+            callableStatement.setDouble(4, facility.getDeposit());
+            callableStatement.setInt(5, facility.getMaxPeople());
+            callableStatement.setInt(6, facility.getRentTypeId());
+            callableStatement.setInt(7, facility.getFacilityType());
+            callableStatement.setString(8, standardRoom);
+            callableStatement.setString(9, description);
+            callableStatement.setDouble(10, poolArea);
+            callableStatement.setInt(11, numberFloor);
+            callableStatement.setString(12, facilityFree);
+            check = callableStatement.executeUpdate();
+            return check > 0? true: false;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return false;
     }
 
     @Override
     public boolean deleteFacility(int id) {
+        int check;
+        Connection connection = DatabaseConnect.getConnectDB();
+        try {
+            CallableStatement callableStatement = connection.prepareCall(DELETE_FACILITY);
+            callableStatement.setInt(1, id);
+            check = callableStatement.executeUpdate();
+            return check > 0? true: false;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return false;
     }
 

@@ -157,7 +157,6 @@ public class FurumaServlet extends HttpServlet {
         List<Customer> customerList = customerService.findAll();
         request.setAttribute("customer", customerList);
         RequestDispatcher rq = request.getRequestDispatcher("view/customer/list.jsp");
-
         try {
             rq.forward(request, response);
         } catch (ServletException e) {
@@ -280,6 +279,24 @@ public class FurumaServlet extends HttpServlet {
             case "list_facility":
                 showListFacility(request, response);
                 break;
+            case "delete_facility":
+                deleteFacility(request, response);
+                break;
+        }
+    }
+
+    private void deleteFacility(HttpServletRequest request, HttpServletResponse response) {
+        int id = Integer.parseInt(request.getParameter("id"));
+        facilityService.deleteFacility(id);
+        List<Facility> facilityList = facilityService.findAllFacility();
+        request.setAttribute("facility", facilityList);
+        RequestDispatcher rq = request.getRequestDispatcher("view/facility/list.jsp");
+        try {
+            rq.forward(request, response);
+        } catch (ServletException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -331,7 +348,43 @@ public class FurumaServlet extends HttpServlet {
     }
 
     private void insertFacility(HttpServletRequest request, HttpServletResponse response) {
-
+        Facility facility;
+        int id = Integer.parseInt(request.getParameter("id"));
+        String name = request.getParameter("name");
+        int area = Integer.parseInt(request.getParameter("area"));
+        double deposit = Double.parseDouble(request.getParameter("cost"));
+        int maxPeople = Integer.parseInt(request.getParameter("max_people"));
+        int typeId = Integer.parseInt(request.getParameter("rent_type_id"));
+        int facilityType = Integer.parseInt(request.getParameter("create"));
+        String standardRoom = request.getParameter("standard_room");
+        String description = request.getParameter("description_other_convenience");
+        String poolArea1 = request.getParameter("pool_area");
+        double poolArea;
+        if (poolArea1.equals("")){
+            poolArea = 0;
+        }else {
+            poolArea = Double.parseDouble(poolArea1);
+        }
+        String numberFloor1 = request.getParameter("number_of_floors");
+        int numberFloor;
+        if (numberFloor1.equals("")){
+            numberFloor = 0;
+        }else {
+            numberFloor = Integer.parseInt(numberFloor1);
+        }
+        String free = request.getParameter("facility_free");
+        facility = new Facility(id, name, area, deposit, maxPeople, typeId, facilityType, standardRoom, description, poolArea, numberFloor,free);
+        facilityService.CreateFacility(facility);
+        List<Facility> facilityList = facilityService.findAllFacility();
+        request.setAttribute("facility", facilityList);
+        RequestDispatcher rq = request.getRequestDispatcher("view/facility/list.jsp");
+        try {
+            rq.forward(request, response);
+        } catch (ServletException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void insertEmployee(HttpServletRequest request, HttpServletResponse response) {

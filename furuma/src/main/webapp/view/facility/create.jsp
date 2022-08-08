@@ -70,17 +70,20 @@
 
 <div class="container w-50 mt-2 p-2 bg-light" style="border: 1px solid grey; border-radius: 15px">
     <h3 align="center">Add New Facility</h3>
-    <form class="row g-3">
+    <form class="row g-3" action="/furuma?action=insert_facility" method="post">
         <div class="col-md-12">
             <label class="form-label">Facility type</label>
-            <select name=""  class="form-select" onchange="showServiceInput(this)">
+            <select name="create"  class="form-select" onchange="showServiceInput(this)">
                 <option value="None" >Select Facility</option>
-                <option value="Villa" >Villa</option>
-                <option value="House" >House</option>
-                <option value="Room" >Room</option>
+                <option value="1" >Villa</option>
+                <option value="2" >House</option>
+                <option value="3" >Room</option>
             </select>
         </div>
-
+        <div class="col-md-12">
+            <label for="id" class="form-label">Facility id</label>
+            <input type="text" class="form-control" id="id" name="id">
+        </div>
         <div class="col-md-12">
             <label for="name" class="form-label">Facility Name</label>
             <input type="text" class="form-control" id="name" name="name">
@@ -144,21 +147,21 @@
                 document.getElementById("s4").style.display="none";
                 document.getElementById("s5").style.display="none";
                 break;
-            case "Villa":
+            case "1":
                 document.getElementById("s1").style.display="block";
                 document.getElementById("s2").style.display="block";
                 document.getElementById("s3").style.display="block";
                 document.getElementById("s4").style.display="block";
                 document.getElementById("s5").style.display="none";
                 break;
-            case "House":
+            case "2":
                 document.getElementById("s1").style.display="block";
                 document.getElementById("s2").style.display="block";
                 document.getElementById("s4").style.display="block";
                 document.getElementById("s5").style.display="none";
                 document.getElementById("s3").style.display="none";
                 break;
-            case "Room":
+            case "3":
                 document.getElementById("s1").style.display="none";
                 document.getElementById("s2").style.display="none";
                 document.getElementById("s3").style.display="none";

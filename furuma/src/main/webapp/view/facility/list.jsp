@@ -100,7 +100,7 @@
                 <td>${fac.numberFloor}</td>
                 <td>${fac.facilityFree}</td>
                 <td>
-                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#edit-modal" onclick="location.href='/furuma?action=edit_facility&id=${fac.id}'">
+                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#edit-modal" onclick="location.href='/furuma?action=show_edit_facility&id=${fac.id}&create=${fac.facilityType}'">
                         Edit
                     </button>
                 </td>
@@ -115,7 +115,7 @@
 </div>
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-   <form action="/furuma?action=delete">
+   <form action="/furuma?action=delete_facility" method="post">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -123,7 +123,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <input type="text" readonly id="deleteId" class="form-control-plaintext">
+                <input type="text" id="deleteId" class="form-control-plaintext" name="id">
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
