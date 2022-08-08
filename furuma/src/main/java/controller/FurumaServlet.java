@@ -1,6 +1,8 @@
 package controller;
 
 import model.facility.Facility;
+import model.facility.RentType;
+import model.facility.ServiceType;
 import model.person.customer.Customer;
 import service.impl.CustomerService;
 import service.impl.FacilityService;
@@ -108,6 +110,13 @@ public class FurumaServlet extends HttpServlet {
     }
 
     private void showEditFacility(HttpServletRequest request, HttpServletResponse response) {
+        int id = Integer.parseInt(request.getParameter("id"));
+        Facility facility = facilityService.findById(id);
+        List<ServiceType> serviceTypes = facilityService.getServiceTypeList();
+        List<RentType> rentTypes = facilityService.getRentalTypeList();
+        request.setAttribute("facility1", facility);
+        request.setAttribute("facilityType", serviceTypes);
+        request.setAttribute("rentType", rentTypes);
         RequestDispatcher rq = request.getRequestDispatcher("view/facility/edit.jsp");
         try {
             rq.forward(request, response);
@@ -143,7 +152,7 @@ public class FurumaServlet extends HttpServlet {
     }
 
     private void home(HttpServletRequest request, HttpServletResponse response) {
-        RequestDispatcher rq = request.getRequestDispatcher("index.jsp");
+        RequestDispatcher rq = request.getRequestDispatcher("view/home.jsp");
         try {
             rq.forward(request, response);
         } catch (ServletException e) {
@@ -282,6 +291,49 @@ public class FurumaServlet extends HttpServlet {
             case "delete_facility":
                 deleteFacility(request, response);
                 break;
+            case "edit_facility":
+                EditFacility(request, response);
+                break;
+        }
+    }
+
+    private void EditFacility(HttpServletRequest request, HttpServletResponse response) {
+        Facility facility;
+        int id = Integer.parseInt(request.getParameter("id"));
+        String name = request.getParameter("name");
+        int area = Integer.parseInt(request.getParameter("area"));
+        double deposit = Double.parseDouble(request.getParameter("cost"));
+        int maxPeople = Integer.parseInt(request.getParameter("max_people"));
+        int typeId = Integer.parseInt(request.getParameter("rent_type_id"));
+        int facilityType = Integer.parseInt(request.getParameter("create"));
+        String standardRoom = request.getParameter("standard_room");
+        String description = request.getParameter("description_other_convenience");
+        String poolArea1 = request.getParameter("pool_area");
+        double poolArea;
+        if (poolArea1.equals("")){
+            poolArea = 0;
+        }else {
+            poolArea = Double.parseDouble(poolArea1);
+        }
+        String numberFloor1 = request.getParameter("number_of_floors");
+        int numberFloor;
+        if (numberFloor1.equals("")){
+            numberFloor = 0;
+        }else {
+            numberFloor = Integer.parseInt(numberFloor1);
+        }
+        String free = request.getParameter("facility_free");
+        facility = new Facility(id, name, area, deposit, maxPeople, typeId, facilityType, standardRoom, description, poolArea, numberFloor,free);
+        facilityService.editFacility(facility, id);
+        List<Facility> facilityList = facilityService.findAllFacility();
+        request.setAttribute("facility", facilityList);
+        RequestDispatcher rq = request.getRequestDispatcher("view/facility/list.jsp");
+        try {
+            rq.forward(request, response);
+        } catch (ServletException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

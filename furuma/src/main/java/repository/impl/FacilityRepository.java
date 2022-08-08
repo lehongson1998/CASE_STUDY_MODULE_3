@@ -5,10 +5,8 @@ import model.facility.Facility;
 import model.facility.RentType;
 import model.facility.ServiceType;
 import repository.IFacilityRepository;
-import java.sql.CallableStatement;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +15,9 @@ public class FacilityRepository implements IFacilityRepository {
     private final String CREATE_FACILITY = "CALL create_new_facility(?,?,?,?,?,?,?,?,?,?,?,?);";
     private final String EDIT_FACILITY = "CALL edit_facility(?,?,?,?,?,?,?,?,?,?,?,?);";
     private final String DELETE_FACILITY = "CALL delete_facility(?);";
+    private final String SELECT_BY_ID = "SELECT * FROM dich_vu WHERE ma_dich_vu = ?;";
+    private final String SELECT_TYPE_FACILITY = "SELECT * FROM loai_dich_vu;";
+    private final String SELECT_RENT_TYPE = "SELECT * FROM kieu_thue;";
 
     @Override
     public boolean CreateFacility(Facility facility) {
@@ -154,16 +155,66 @@ public class FacilityRepository implements IFacilityRepository {
 
     @Override
     public Facility findById(int id_search) {
-        return null;
+        Connection connection = DatabaseConnect.getConnectDB();
+        Facility facility = null;
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BY_ID);
+            preparedStatement.setInt(1, id_search);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()){
+                int id = resultSet.getInt("ma_dich_vu");
+                String name = resultSet.getString("ten_dich_vu");
+                int area = resultSet.getInt("dien_tich");
+                double deposit = resultSet.getInt("chi_phi_thue");
+                int maxPeople = resultSet.getInt("so_nguoi_toi_da");
+                int rentType = resultSet.getInt("ma_kieu_thue");
+                int facilityType = resultSet.getInt("ma_loai_dich_vu");
+                String standardRoom = resultSet.getString("tieu_chuan_phong");
+                String description = resultSet.getString("mo_ta_tien_nghi_khac");
+                double poolArea = resultSet.getInt("dien_tich_ho_boi");
+                int numberFloor = resultSet.getInt("so_tang");
+                String facilityFree = resultSet.getString("dien_tich_mien_phi_di_kem");
+                facility = new Facility(id, name, area, deposit, maxPeople, rentType, facilityType, standardRoom, description, poolArea, numberFloor, facilityFree);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return facility;
     }
 
     @Override
     public List<ServiceType> getServiceTypeList() {
-        return null;
+        List<ServiceType> typeList = new ArrayList<>();
+        Connection connection = DatabaseConnect.getConnectDB();
+        try {
+            PreparedStatement pr = connection.prepareStatement(SELECT_TYPE_FACILITY);
+            ResultSet rs = pr.executeQuery();
+            while (rs.next()){
+                int id = rs.getInt("ma_loai_dich_vu");
+                String name = rs.getString("ten_loai_dich_vu");
+                typeList.add(new ServiceType(id, name));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return typeList;
     }
 
     @Override
     public List<RentType> getRentalTypeList() {
-        return null;
+        List<RentType> rentTypes = new ArrayList<>();
+        Connection connection = DatabaseConnect.getConnectDB();
+        try {
+            PreparedStatement pr = connection.prepareStatement(SELECT_RENT_TYPE);
+            ResultSet rs = pr.executeQuery();
+            while (rs.next()){
+                int id = rs.getInt("ma_kieu_thue");
+                String name = rs.getString("ten_kieu_thue");
+                rentTypes.add(new RentType(id, name));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return rentTypes;
     }
 }

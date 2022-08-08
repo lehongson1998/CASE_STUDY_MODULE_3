@@ -100,7 +100,7 @@
                 <td>${fac.numberFloor}</td>
                 <td>${fac.facilityFree}</td>
                 <td>
-                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#edit-modal" onclick="location.href='/furuma?action=show_edit_facility&id=${fac.id}&create=${fac.facilityType}'">
+                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#edit-modal" onclick="location.href='/furuma?action=show_edit_facility&id=${fac.id}'">
                         Edit
                     </button>
                 </td>
