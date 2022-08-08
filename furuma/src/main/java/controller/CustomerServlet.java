@@ -179,7 +179,7 @@ public class CustomerServlet extends HttpServlet {
         String email = request.getParameter("email");
         String address = request.getParameter("address");
         Customer customer = new Customer(id, name, dateOfBirth, idCard, phone, email, address, typeId, gender);
-        boolean flag = customerService.create(customer);
+        boolean flag = false; customerService.create(customer);
         if (flag){
             request.setAttribute("message", "insert success");
         }else {

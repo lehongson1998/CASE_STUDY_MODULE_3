@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
 
 @WebServlet(name = "FurumaServlet", value = "/furuma")
 public class FurumaServlet extends HttpServlet {
@@ -426,12 +427,18 @@ public class FurumaServlet extends HttpServlet {
         }
         String free = request.getParameter("facility_free");
         facility = new Facility(id, name, area, deposit, maxPeople, typeId, facilityType, standardRoom, description, poolArea, numberFloor,free);
-        facilityService.CreateFacility(facility);
-        List<Facility> facilityList = facilityService.findAllFacility();
-        request.setAttribute("facility", facilityList);
-        RequestDispatcher rq = request.getRequestDispatcher("view/facility/list.jsp");
+        Map<String, String> mapError = facilityService.CreateFacility(facility);
+        RequestDispatcher dispatcher;
+        if (mapError.size() > 0){
+            request.setAttribute("message", mapError.get("name"));
+            dispatcher = request.getRequestDispatcher("view/facility/create.jsp");
+        }else {
+            List<Facility> facilityList = facilityService.findAllFacility();
+            request.setAttribute("facility", facilityList);
+            dispatcher = request.getRequestDispatcher("view/facility/list.jsp");
+        }
         try {
-            rq.forward(request, response);
+            dispatcher.forward(request, response);
         } catch (ServletException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -454,13 +461,15 @@ public class FurumaServlet extends HttpServlet {
         String email = request.getParameter("email");
         String address = request.getParameter("address");
         Customer customer = new Customer(id, name, dateOfBirth, idCard, phone, email, address, typeId, gender);
-        boolean flag = customerService.create(customer);
-        if (flag){
-            request.setAttribute("message", "insert success");
+        Map<String, String> mapError = customerService.create(customer);
+        RequestDispatcher dispatcher;
+        if (mapError.size() > 0){
+            request.setAttribute("message", mapError.get("name"));
+            dispatcher = request.getRequestDispatcher("view/customer/create.jsp");
         }else {
-            request.setAttribute("message", "insert error");
+            request.setAttribute("customer", customerService.findAll());
+            dispatcher = request.getRequestDispatcher("view/customer/list.jsp");
         }
-        RequestDispatcher dispatcher = request.getRequestDispatcher("view/customer/create.jsp");
         try {
             dispatcher.forward(request, response);
         } catch (ServletException e) {

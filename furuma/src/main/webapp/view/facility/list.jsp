@@ -134,7 +134,6 @@
    </form>
 </div>
 
-
 <script>
     function removeFacility(id){
         document.getElementById("deleteId").value = id;

@@ -134,6 +134,9 @@
             <button type="submit" class="btn btn-success">Create</button>
         </div>
     </form>
+    <c:if test="${message != null}">
+        <h4>${message}</h4>
+    </c:if>
 </div>
 <script>
 

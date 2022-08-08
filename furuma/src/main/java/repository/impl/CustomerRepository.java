@@ -101,7 +101,7 @@ public class CustomerRepository implements ICustomerRepository {
     }
 
     @Override
-    public boolean create(Customer customer) {
+    public void create(Customer customer) {
         Connection connection = DatabaseConnect.getConnectDB();
         int check;
         try {
@@ -116,11 +116,9 @@ public class CustomerRepository implements ICustomerRepository {
             callableStatement.setString(8, customer.getEmail());
             callableStatement.setString(9, customer.getAddress());
             check = callableStatement.executeUpdate();
-            return check > 0? true: false;
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false;
     }
 
     @Override

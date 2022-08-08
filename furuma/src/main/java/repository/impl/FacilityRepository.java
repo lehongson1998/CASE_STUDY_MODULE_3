@@ -20,8 +20,7 @@ public class FacilityRepository implements IFacilityRepository {
     private final String SELECT_RENT_TYPE = "SELECT * FROM kieu_thue;";
 
     @Override
-    public boolean CreateFacility(Facility facility) {
-        int check;
+    public void CreateFacility(Facility facility) {
         Connection connection = DatabaseConnect.getConnectDB();
         String standardRoom = facility.getStandardRoom();
         String description = facility.getDescription();
@@ -53,12 +52,10 @@ public class FacilityRepository implements IFacilityRepository {
             callableStatement.setDouble(10, poolArea);
             callableStatement.setInt(11, numberFloor);
             callableStatement.setString(12, facilityFree);
-            check = callableStatement.executeUpdate();
-            return check > 0? true: false;
+            callableStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false;
     }
 
     @Override
