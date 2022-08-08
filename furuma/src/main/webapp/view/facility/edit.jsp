@@ -7,11 +7,11 @@
 </head>
 <body>
 <div class="container w-50 mt-2 p-2 bg-light" style="border: 1px solid grey; border-radius: 15px">
-    <h3 align="center">Add New Facility</h3>
+    <h3 align="center">Edit Facility</h3>
     <form class="row g-3" action="/furuma?action=edit_facility" method="post">
         <div class="col-md-12">
             <label class="form-label">Facility type</label>
-            <select name="create"  class="form-select" onchange="showServiceInput(this)">
+            <select name="create"  class="form-select" onchange="showServiceInput(this)" id="serviceSelect">
                 <option value="None" disabled >Select Facility</option>
                 <c:forEach items="${facilityType}" var="serviceTypes">
                     <c:choose>
@@ -125,6 +125,30 @@
                 document.getElementById("s4").style.display="none";
                 document.getElementById("s5").style.display="block";
                 break;
+        }
+    }
+
+    window.onload=function (){
+        if( document.getElementById("serviceSelect").value =='1'){
+            document.getElementById("s1").style.display="block";
+            document.getElementById("s2").style.display="block";
+            document.getElementById("s3").style.display="block";
+            document.getElementById("s4").style.display="block";
+            document.getElementById("s5").style.display="none";
+        }
+        if( document.getElementById("serviceSelect").value =='2') {
+            document.getElementById("s1").style.display="block";
+            document.getElementById("s2").style.display="block";
+            document.getElementById("s4").style.display="block";
+            document.getElementById("s5").style.display="none";
+            document.getElementById("s3").style.display="none";
+        }
+        if( document.getElementById("serviceSelect").value =='3') {
+            document.getElementById("s1").style.display="none";
+            document.getElementById("s2").style.display="none";
+            document.getElementById("s3").style.display="none";
+            document.getElementById("s4").style.display="none";
+            document.getElementById("s5").style.display="block";
         }
     }
 </script>
