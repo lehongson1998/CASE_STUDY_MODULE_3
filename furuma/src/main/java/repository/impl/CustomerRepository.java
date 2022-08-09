@@ -14,7 +14,7 @@ import java.util.List;
 public class CustomerRepository implements ICustomerRepository {
     private final String SELECT_CUSTOMER = "CALL find_all_customer();";
     private final String SELECT_CUSTOMER_BY_ID = "CALL find_customer_by_id(?);";
-    private final String ADD_NEW_CUSTOMER = "CALL insert_new_customer(?, ?, ?, ?, ?, ?, ?, ?, ?);";
+    private final String ADD_NEW_CUSTOMER = "CALL insert_new_customer(?, ?, ?, ?, ?, ?, ?, ?);";
     private final String EDIT_CUSTOMER = "CALL edit_customer(?, ?, ?, ?, ?, ?, ?, ?, ?);";
     private final String DELETE_CUSTOMER = "CALL delete_customer(?);";
     private final String FIND_BY_NAME_CUSTOMER = "CALL find_by_name_customer(?);";
@@ -103,19 +103,17 @@ public class CustomerRepository implements ICustomerRepository {
     @Override
     public void create(Customer customer) {
         Connection connection = DatabaseConnect.getConnectDB();
-        int check;
         try {
             CallableStatement callableStatement = connection.prepareCall(ADD_NEW_CUSTOMER);
-            callableStatement.setInt(1, customer.getId());
-            callableStatement.setInt(2, customer.getTypeCustomerId());
-            callableStatement.setString(3, customer.getName());
-            callableStatement.setDate(4, Date.valueOf(customer.getDateOfBirth()));
-            callableStatement.setInt(5, customer.getGender());
-            callableStatement.setString(6, customer.getIdCard());
-            callableStatement.setString(7, customer.getPhoneNumber());
-            callableStatement.setString(8, customer.getEmail());
-            callableStatement.setString(9, customer.getAddress());
-            check = callableStatement.executeUpdate();
+            callableStatement.setInt(1, customer.getTypeCustomerId());
+            callableStatement.setString(2, customer.getName());
+            callableStatement.setDate(3, Date.valueOf(customer.getDateOfBirth()));
+            callableStatement.setInt(4, customer.getGender());
+            callableStatement.setString(5, customer.getIdCard());
+            callableStatement.setString(6, customer.getPhoneNumber());
+            callableStatement.setString(7, customer.getEmail());
+            callableStatement.setString(8, customer.getAddress());
+            callableStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }

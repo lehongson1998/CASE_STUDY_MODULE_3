@@ -3,10 +3,12 @@
 <html>
 <head>
     <title>edit contract</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-</head>
+    <link rel="stylesheet" href="/bootstrap-5.1.3-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/bootstrap520/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/datatables/css/dataTables.bootstrap5.min.css"/></head>
 <body>
-<form action="/furuma?action=edit_customer" method="post">
+<%@include file="../include/header.jsp"%>
+<form action="/Customer?action=editCustomer" method="post">
     <div class="modal-dialog">
         <c:if test="${cus != null}">
             <div class="modal-content">
@@ -82,7 +84,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="location.href='/furuma?action=list_customer'">Cancel</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="location.href='/Customer?action=listCustomer'">Cancel</button>
                     <button type="submit" class="btn btn-primary">Edit Customer</button>
                 </div>
             </div>
@@ -92,12 +94,13 @@
 <c:if test="${message != null}">
     <div class="col-md-5 bg-light mt-5 p-3 text-center" style="margin: auto">
         <h1>${message}</h1>
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="location.href='/furuma?action=list_customer'">Back</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="location.href='/Customer?action=listCustomer'">Back</button>
     </div>
 </c:if>
-
+<script src="/jquery/jquery-3.5.1.min.js"></script>
+<script src="/bootstrap-5.1.3-dist/js/bootstrap.min.js"></script>
+<script src="/datatables/js/jquery.dataTables.min.js"></script>
+<script src="/datatables/js/dataTables.bootstrap5.min.js"></script>
 <script src="https://kit.fontawesome.com/8a4e8d8d08.js" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
 </body>
 </html>

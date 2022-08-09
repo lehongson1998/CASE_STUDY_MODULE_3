@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
 
 @WebServlet(name = "CustomerServlet", value = "/Customer")
 public class CustomerServlet extends HttpServlet {
@@ -30,16 +31,43 @@ public class CustomerServlet extends HttpServlet {
             case "showCreateCustomer":
                 showFormCreateCustomer(request, response);
                 break;
-            case "editCustomer":
+            case "showEditCustomer":
                 showFormEditCustomer(request, response);
+                break;
+            case "showCustomerById":
+                showCustomerById(request, response);
                 break;
             default:
                 home(request, response);
         }
     }
 
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("text/html; charset=UTF-8");
+        request.setCharacterEncoding("UTF-8");
+        String action = request.getParameter("action");
+        if (action == null){
+            action = "";
+        }
+        switch (action){
+            case "createCustomer":
+                createCustomer(request, response);
+                break;
+            case "editCustomer":
+                editCustomer(request, response);
+                break;
+            case "deleteCustomer":
+                deleteCustomer(request, response);
+                break;
+            case "findByNameCustomer":
+                showCustomerByName(request, response);
+                break;
+        }
+    }
+
     private void home(HttpServletRequest request, HttpServletResponse response) {
-        RequestDispatcher rq = request.getRequestDispatcher("index.jsp");
+        RequestDispatcher rq = request.getRequestDispatcher("home.jsp");
         try {
             rq.forward(request, response);
         } catch (ServletException e) {
@@ -87,27 +115,17 @@ public class CustomerServlet extends HttpServlet {
         }
     }
 
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setContentType("text/html; charset=UTF-8");
-        request.setCharacterEncoding("UTF-8");
-        String action = request.getParameter("action");
-        if (action == null){
-            action = "";
-        }
-        switch (action){
-            case "createCustomer":
-                createCustomer(request, response);
-                break;
-            case "editCustomer":
-                editCustomer(request, response);
-                break;
-            case "deleteCustomer":
-                deleteCustomer(request, response);
-                break;
-            case "findByNameCustomer":
-                showCustomerByName(request, response);
-                break;
+    private void showCustomerById(HttpServletRequest request, HttpServletResponse response) {
+        int id = Integer.parseInt(request.getParameter("id"));
+        Customer customer = customerService.findById(id);
+        request.setAttribute("customer", customer);
+        RequestDispatcher rq = request.getRequestDispatcher("view/customer/list.jsp");
+        try {
+            rq.forward(request, response);
+        } catch (ServletException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -169,7 +187,6 @@ public class CustomerServlet extends HttpServlet {
     }
 
     private void createCustomer(HttpServletRequest request, HttpServletResponse response) {
-        int id = Integer.parseInt(request.getParameter("id"));
         int typeId = Integer.parseInt(request.getParameter("typeId"));
         String name = request.getParameter("name");
         LocalDate dateOfBirth = LocalDate.parse(request.getParameter("dateOfBirth"), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
@@ -178,14 +195,17 @@ public class CustomerServlet extends HttpServlet {
         String phone = request.getParameter("phone");
         String email = request.getParameter("email");
         String address = request.getParameter("address");
-        Customer customer = new Customer(id, name, dateOfBirth, idCard, phone, email, address, typeId, gender);
-        boolean flag = false; customerService.create(customer);
-        if (flag){
-            request.setAttribute("message", "insert success");
-        }else {
+        Customer customer = new Customer(name, dateOfBirth, idCard, phone, email, address, typeId, gender);
+        Map<String, String> mapError = customerService.create(customer);
+        RequestDispatcher dispatcher;
+        if (mapError.size() > 0){
+            request.setAttribute("map", mapError);
             request.setAttribute("message", "insert error");
+            dispatcher = request.getRequestDispatcher("view/customer/create.jsp");
+        }else {
+            request.setAttribute("customer", customerService.findAll());
+            dispatcher = request.getRequestDispatcher("view/customer/list.jsp");
         }
-        RequestDispatcher dispatcher = request.getRequestDispatcher("view/customer/create.jsp");
         try {
             dispatcher.forward(request, response);
         } catch (ServletException e) {

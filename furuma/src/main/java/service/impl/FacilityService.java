@@ -19,22 +19,33 @@ public class FacilityService implements IFacilityService {
     public Map<String, String> CreateFacility(Facility facility) {
         Map<String, String> mapErrors = new HashMap<>();
 
-        if (!facility.getName().isEmpty()
-                || facility.getNumberFloor() != 0
-                || facility.getDeposit() != 0)
-        {
+        if (!facility.getName().isEmpty()) {
             String name = VnCharacterUnit.removeAccent(facility.getName());
-            int numberFloor = facility.getNumberFloor();
-            double deposit = facility.getDeposit();
-            if (!name.matches(REGEX_NAME_FACILITY)
-                    || numberFloor < 0
-                    || deposit < 0)
+            if (!name.matches(REGEX_NAME_FACILITY))
             {
-                mapErrors.put("name", "Please input right format!");
+                mapErrors.put("name", "* Please input right format!");
             }
         } else {
-            mapErrors.put("name", "Please input name!");
+            mapErrors.put("name", "* Please input name!");
         }
+        if (facility.getNumberFloor() != 0){
+            int numberFloor = facility.getNumberFloor();
+            if (numberFloor < 0){
+                mapErrors.put("number", "* enter a positive integer!");
+            }
+        }else {
+            mapErrors.put("number", "* Please input number floor");
+        }
+
+        if (facility.getDeposit() != 0){
+            double deposit = facility.getDeposit();
+            if (deposit < 0){
+                mapErrors.put("deposit", "* enter a positive integer!");
+            }
+        }else {
+            mapErrors.put("deposit", "* Please input number floor");
+        }
+
         if (mapErrors.size() == 0) {
             facilityRepository.CreateFacility(facility);
         }

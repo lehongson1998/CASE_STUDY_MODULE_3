@@ -6,6 +6,7 @@ import repository.impl.CustomerRepository;
 import service.ICustomerService;
 import unit.VnCharacterUnit;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,25 +35,46 @@ public class CustomerService implements ICustomerService {
     @Override
     public Map<String, String> create(Customer customer) {
         Map<String, String> mapErrors = new HashMap<>();
-
-        if (!customer.getName().isEmpty()
-                && !customer.getPhoneNumber().isEmpty()
-                && !customer.getIdCard().isEmpty()
-                && !customer.getEmail().isEmpty())
-        {
+        if (!customer.getName().isEmpty()) {
             String name = VnCharacterUnit.removeAccent(customer.getName());
-            String phone = customer.getPhoneNumber();
-            String idCard = customer.getIdCard();
-            String email = customer.getEmail();
-            if (!name.matches(REGEX_NAME_CUSTOMER)
-                    || !phone.matches(REGEX_PHONE_NUMBER)
-                    || !idCard.matches(REGEX_ID_CARD)
-                    || email.matches(REGEX_EMAIL))
-            {
-                mapErrors.put("name", "Please input right format!");
+            if (!name.matches(REGEX_NAME_CUSTOMER)) {
+                mapErrors.put("name", "* Please input right format!");
             }
         } else {
-            mapErrors.put("name", "Please input name!");
+            mapErrors.put("name", "* Please input name!");
+        }
+
+        if (!customer.getPhoneNumber().isEmpty()){
+            String phone = customer.getPhoneNumber();
+            if (!phone.matches(REGEX_PHONE_NUMBER)){
+                mapErrors.put("phone", "* Please input phone format!");
+            }
+        }else {
+            mapErrors.put("phone", "* Please input phone!");
+        }
+
+        if (!customer.getIdCard().isEmpty()){
+            String idCard = customer.getIdCard();
+            if (!idCard.matches(REGEX_ID_CARD)){
+                mapErrors.put("idCard", "* please input 9-12 number!");
+            }
+        }else {
+            mapErrors.put("idCard", "* Please input id card!");
+        }
+
+        try {
+            LocalDate localDate= customer.getDateOfBirth();
+        }catch (Exception e){
+            mapErrors.put("date", "false format day!");
+        }
+
+        if (!customer.getEmail().isEmpty()){
+            String email = customer.getEmail();
+            if (!email.matches(REGEX_EMAIL)){
+                mapErrors.put("email", "* please input email right format!");
+            }
+        }else {
+            mapErrors.put("email", "* Please input email!");
         }
         if (mapErrors.size() == 0) {
             customerRepository.create(customer);

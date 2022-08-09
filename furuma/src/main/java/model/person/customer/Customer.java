@@ -16,6 +16,12 @@ public class Customer extends Person {
         this.gender = gender;
     }
 
+    public Customer(String name, LocalDate dateOfBirth, String idCard, String phoneNumber, String email, String address, int typeCustomerId, int gender) {
+        super(name, dateOfBirth, idCard, phoneNumber, email, address);
+        this.typeCustomerId = typeCustomerId;
+        this.gender = gender;
+    }
+
     public int getTypeCustomerId() {
         return typeCustomerId;
     }
